@@ -3,10 +3,10 @@
 # License: GPLv2
 
 # Default document root (change if neccessary)
-DOCROOT="/var/www"
+DOCROOT=
 
 # Default log root (change if neccessary)
-LOGROOT="/var/log/apache2"
+LOGROOT=
 
 # Directory name and domain name if $TLD is empty (enter to avoid having to use this argument)
 NAME=
@@ -170,6 +170,9 @@ EOF
 	echo "\"$VHOSTDOCROOT\" already owned by user \"$DOCROOTUSER\" from group \"$DOCROOTGROUP\", so not changing group ownership..."
     fi
 
+    echo "chmod g+rw $VHOSTDOCROOT"
+    chmod g+rw -R $VHOSTDOCROOT
+
     # Add line to "/etc/hosts" if it isn't already there
     grep -Fxq "$HOSTSLINE" "/etc/hosts"
     if [ $? = 1 ]
@@ -184,7 +187,7 @@ EOF
     if [ ! -f $VHOSTFILE ]
     then
 	echo "Creating \"$VHOSTFILE\"..."
-cat > $VHOSTFILE <<EOF
+cat > $VHOSTFILE.conf <<EOF
 <VirtualHost *:80>
     ServerAdmin webmaster@$VHOSTDOMAIN
     ServerName $VHOSTDOMAIN
@@ -223,8 +226,8 @@ QUERY_INPUT
     fi
 
     # Enable virtual host
-    echo "Running \"a2ensite $NAME\"..."
-    a2ensite $NAME>/dev/null 2>&1
+    echo "Running \"a2ensite $NAME.conf\"..."
+    a2ensite $NAME.conf>/dev/null 2>&1
 
     # Restart apache service
     echo "Running \"service apache2 restart\"..."
