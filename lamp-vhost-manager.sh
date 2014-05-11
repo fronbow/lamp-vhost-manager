@@ -81,22 +81,22 @@ function usage() {
 
   Examples:
     -Add project "example.loc" and create database having "example.loc" user and password and name:
-	$0 -m add -n example.loc -u mysqladminusername -p mysqladminuserpassword
+        $0 -m add -n example.loc -u mysqladminusername -p mysqladminuserpassword
 
     -Remove project "example.loc" and optionaly remove database having "example.loc" user and password and name:
-	$0 -m remove -n example.loc -u mysqladminusername -p mysqladminuserpassword
+        $0 -m remove -n example.loc -u mysqladminusername -p mysqladminuserpassword
 
     -Add project "example.loc" using "example" as directory name and "example.loc" as domain without creating database:
-	$0 -m add -n example -t loc
+        $0 -m add -n example -t loc
 
     -Remove project "example.loc" using "example" as directory name and "example.loc" as domain without removing database:
-	$0 -m remove -n example -t loc
+        $0 -m remove -n example -t loc
 
     -Add project "example.loc" and create database having "exampledbname" name, "exampledbuser" user and "exampledbpass" password:
-	$0 -m add -n example.loc -u mysqladminusername -p mysqladminuserpassword -U exampledbuser -P exampledbpass -N exampledbname
+        $0 -m add -n example.loc -u mysqladminusername -p mysqladminuserpassword -U exampledbuser -P exampledbpass -N exampledbname
 
     -Remove project "example.loc" and optionaly remove database having "exampledbname" name, "exampledbuser" user and "exampledbpass" password:
-	$0 -m remove -n example.loc -u mysqladminusername -p mysqladminuserpassword -U exampledbuser -P exampledbpass -N exampledbname
+        $0 -m remove -n example.loc -u mysqladminusername -p mysqladminuserpassword -U exampledbuser -P exampledbpass -N exampledbname
 EOF
 }
 
@@ -105,8 +105,8 @@ function add() {
     # Create virtualhost document root
     if [ ! -d $VHOSTDOCROOT ]
     then
-	echo "Creating \"$VHOSTDOCROOT\"..."
-	mkdir $VHOSTDOCROOT
+        echo "Creating \"$VHOSTDOCROOT\"..."
+        mkdir $VHOSTDOCROOT
 
      # Create git repository
       if [ $GIT == true ]
@@ -116,34 +116,34 @@ function add() {
       fi
 
     else
-	echo "\"$VHOSTDOCROOT\" already exists, so not creating..."
+        echo "\"$VHOSTDOCROOT\" already exists, so not creating..."
     fi
 
     # Create virtualhost log root
     if [ ! -d $VHOSTLOGROOT ]
     then
-	echo "Creating \"$VHOSTLOGROOT\"..."
-	mkdir $VHOSTLOGROOT
+        echo "Creating \"$VHOSTLOGROOT\"..."
+        mkdir $VHOSTLOGROOT
     else
-	echo "\"$VHOSTLOGROOT\" already exists, so not creating..."
+        echo "\"$VHOSTLOGROOT\" already exists, so not creating..."
     fi
 
     if [ $CGI == true ]
     then
-	echo "Creating \"$VHOSTCGIROOT\"..."
-	mkdir $VHOSTCGIROOT
+        echo "Creating \"$VHOSTCGIROOT\"..."
+        mkdir $VHOSTCGIROOT
 read -r -d '' CGIPATTERN <<EOF
     ScriptAlias /cgi-bin/ $VHOSTCGIROOT/
     <Directory "$VHOSTCGIROOT">
-	AllowOverride None
-	Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-	Order allow,deny
-	Allow from all
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
     </Directory>
 EOF
     else
-	echo "\"$VHOSTCGIROOT\" already exists, so not creating..."
-	CGIPATTERN=
+        echo "\"$VHOSTCGIROOT\" already exists, so not creating..."
+        CGIPATTERN=
     fi
 
     # Detect user and group ownerships (for serving outside of /var/www)
@@ -155,19 +155,19 @@ EOF
     # Chown virtualhost document root to user owning document root if neccessary
     if [ "$DOCROOTUSER" != "$VHOSTDOCROOTUSER" ]
     then
-    	echo "Chown \"$VHOSTDOCROOT\" to \"$DOCROOTUSER\"..."
-	chown -R $DOCROOTUSER $VHOSTDOCROOT
+        echo "Chown \"$VHOSTDOCROOT\" to \"$DOCROOTUSER\"..."
+        chown -R $DOCROOTUSER $VHOSTDOCROOT
     else
-	echo "\"$VHOSTDOCROOT\" already owned by user \"$DOCROOTUSER\", so not changing ownership..."
+        echo "\"$VHOSTDOCROOT\" already owned by user \"$DOCROOTUSER\", so not changing ownership..."
     fi
 
     # Chgrp virtualhost document root to group owning document root if neccessary
     if [ "$DOCROOTGROUP" != "$VHOSTDOCROOTGROUP" ]
     then
-    	echo "Chgrp \"$VHOSTDOCROOT\" to \"$DOCROOTGROUP\"..."
-	chgrp -R $DOCROOTGROUP $VHOSTDOCROOT
+        echo "Chgrp \"$VHOSTDOCROOT\" to \"$DOCROOTGROUP\"..."
+        chgrp -R $DOCROOTGROUP $VHOSTDOCROOT
     else
-	echo "\"$VHOSTDOCROOT\" already owned by user \"$DOCROOTUSER\" from group \"$DOCROOTGROUP\", so not changing group ownership..."
+        echo "\"$VHOSTDOCROOT\" already owned by user \"$DOCROOTUSER\" from group \"$DOCROOTGROUP\", so not changing group ownership..."
     fi
 
     echo "chmod g+rw $VHOSTDOCROOT"
@@ -177,16 +177,16 @@ EOF
     grep -Fxq "$HOSTSLINE" "/etc/hosts"
     if [ $? = 1 ]
     then
-	echo "Adding \"$HOSTSLINE\" to \"/etc/hosts\"..."
-	echo "$HOSTSLINE" >> /etc/hosts
+        echo "Adding \"$HOSTSLINE\" to \"/etc/hosts\"..."
+        echo "$HOSTSLINE" >> /etc/hosts
     else
-	echo "\"$HOSTSLINE\" already inside \"/etc/hosts\", so not adding..."
+        echo "\"$HOSTSLINE\" already inside \"/etc/hosts\", so not adding..."
     fi
 
     # Create virtual host file if it doesn't already exist
     if [ ! -f $VHOSTFILE ]
     then
-	echo "Creating \"$VHOSTFILE\"..."
+        echo "Creating \"$VHOSTFILE\"..."
 cat > $VHOSTFILE.conf <<EOF
 <VirtualHost *:80>
     ServerAdmin webmaster@$VHOSTDOMAIN
@@ -194,14 +194,14 @@ cat > $VHOSTFILE.conf <<EOF
 
     DocumentRoot $VHOSTDOCROOT
     <Directory />
-	Options FollowSymLinks
-	AllowOverride None
+        Options FollowSymLinks
+        AllowOverride None
     </Directory>
     <Directory $VHOSTDOCROOT/>
-	Options Indexes FollowSymLinks MultiViews
-	AllowOverride All
-	Order allow,deny
-	allow from all
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
     </Directory>
     $CGIPATTERN
     CustomLog $VHOSTLOGROOT/access.log combined
@@ -209,7 +209,7 @@ cat > $VHOSTFILE.conf <<EOF
 </VirtualHost>
 EOF
     else
-	echo "\"$VHOSTFILE\" already exists, so not creating..."
+        echo "\"$VHOSTFILE\" already exists, so not creating..."
     fi
 
     # If MySQL credentials are available, use them to create db and user
@@ -222,7 +222,7 @@ CREATE DATABASE IF NOT EXISTS \`$MYSQLN\`;
 GRANT ALL PRIVILEGES ON \`$MYSQLN\`. * TO '$MYSQLU'@'localhost';
 QUERY_INPUT
     else
-	echo "Ommit creating MySQL user and database..."
+        echo "Omit creating MySQL user and database..."
     fi
 
     # Enable virtual host
@@ -239,9 +239,9 @@ QUERY_INPUT
 
     if [[ ! -z $MYSQLAU ]] || [[ ! -z $MYSQLAP ]]
     then
-	echo "MYSQL USER: $MYSQLU"
-	echo "MYSQL PASSWORD: $MYSQLP"
-	echo "MYSQL DATABASE: $MYSQLN"
+        echo "MYSQL USER: $MYSQLU"
+        echo "MYSQL PASSWORD: $MYSQLP"
+        echo "MYSQL DATABASE: $MYSQLN"
     fi
 }
 
@@ -249,64 +249,64 @@ function remove() {
     # Remove virtualhost document root if it exists
     if [ -d $VHOSTDOCROOT ]
     then
-	# Ask for confirmation
-	yes_no_pause "Do you want to remove \"$VHOSTDOCROOT\"?"
-	if [ $? = 0 ]
-	then
-	    echo "Removing \"$VHOSTDOCROOT\"..."
-	    rm -fR $VHOSTDOCROOT
-	else
-	    echo "NOT removing \"$VHOSTDOCROOT\"..."
-	fi
+        # Ask for confirmation
+        yes_no_pause "Do you want to remove \"$VHOSTDOCROOT\"?"
+        if [ $? = 0 ]
+        then
+            echo "Removing \"$VHOSTDOCROOT\"..."
+            rm -fR $VHOSTDOCROOT
+        else
+            echo "NOT removing \"$VHOSTDOCROOT\"..."
+        fi
     else
-	echo "\"$VHOSTDOCROOT\" doesn't exist, so not offering to remove it..."
+        echo "\"$VHOSTDOCROOT\" doesn't exist, so not offering to remove it..."
     fi
 
     # Remove virtualhost log root if it exists
     if [ -d $VHOSTLOGROOT ]
     then
-	echo "Removing \"$VHOSTLOGROOT\"..."
-	rm -fR $VHOSTLOGROOT
+        echo "Removing \"$VHOSTLOGROOT\"..."
+        rm -fR $VHOSTLOGROOT
     else
-	echo "Thereis no \"$VHOSTLOGROOT\", nothing remove..."
+        echo "There is no \"$VHOSTLOGROOT\", nothing remove..."
     fi
 
     # Remove line from /etc/hosts if it is there
     grep -Fxq "$HOSTSLINE" "/etc/hosts"
     if [ $? = 0 ]
     then
-	echo "Removing \"$HOSTSLINE\" from \"/etc/hosts\"..."
-	sudo sed -i "/$HOSTSLINE/d" /etc/hosts
+        echo "Removing \"$HOSTSLINE\" from \"/etc/hosts\"..."
+        sudo sed -i "/$HOSTSLINE/d" /etc/hosts
     else
-	echo "\"$HOSTSLINE\" not inside \"/etc/hosts\", so not removing..."
+        echo "\"$HOSTSLINE\" not inside \"/etc/hosts\", so not removing..."
     fi
 
     # Remove virtual host file if it exists
     if [ -f $VHOSTFILE ]
     then
-	echo "Removing \"$VHOSTFILE\"..."
-	rm $VHOSTFILE
+        echo "Removing \"$VHOSTFILE\"..."
+        rm $VHOSTFILE
     else
-	echo "\"$VHOSTFILE\" doesn't exist, so not removing..."
+        echo "\"$VHOSTFILE\" doesn't exist, so not removing..."
     fi
 
     # If MySQL credentials are available, use them to remove db and user
     if [[ ! -z $MYSQLAU ]] || [[ ! -z $MYSQLAP ]]
     then
-	yes_no_pause "Do you want to remove MySQL \"$NAME\" database and \"$NAME\" user?"
-	if [ $? = 0 ]
-	then
-	    echo "Removing MySQL \"$MYSQLU\" user and \"$MYSQLN\" database..."
+        yes_no_pause "Do you want to remove MySQL \"$NAME\" database and \"$NAME\" user?"
+        if [ $? = 0 ]
+        then
+            echo "Removing MySQL \"$MYSQLU\" user and \"$MYSQLN\" database..."
 mysql "-u$MYSQLAU" "-p$MYSQLAP" <<QUERY_INPUT
 GRANT USAGE ON * . * TO '$MYSQLU'@'localhost';
 DROP USER '$MYSQLU'@'localhost';
 DROP DATABASE IF EXISTS \`$MYSQLN\`;
 QUERY_INPUT
-	else
-	    "Not removing MySQL \"$MYSQLN\" database and \"$MYSQLU\" user..."
-	fi
+        else
+            "Not removing MySQL \"$MYSQLN\" database and \"$MYSQLU\" user..."
+        fi
     else
-	echo "Ommit removing MySQL user and database..."
+        echo "Omit removing MySQL user and database..."
     fi
 
     # Disable virtual host
